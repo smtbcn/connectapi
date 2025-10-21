@@ -116,7 +116,7 @@ GET https://your-domain.com/connectapi/get-token.php
 
 ### 1. Projeyi Klonla
 ```bash
-git clone <repository-url>
+git clone https://github.com/smtbcn/connectapi.git
 cd connectapi
 ```
 
