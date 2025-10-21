@@ -1,0 +1,10 @@
+/cache/
+/config/development/
+
+# IDE and tooling directories
+.kiro/
+.vscode/
+
+# Environment files (sensitive data)
+.env
+connectapi/.env
