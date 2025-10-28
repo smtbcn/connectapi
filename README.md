@@ -42,14 +42,22 @@ connectapi/
 │   └── .env.example          # Konfigürasyon şablonu
 │
 ├── 📦 Orders Modülü (Bağımsız)
-│   ├── helper-orders.php     # Token yönetimi + API çağrıları
-│   ├── database-orders.php   # Veritabanı işlemleri
-│   └── n8n-auto-orders.php   # N8N endpoint'i
+│   ├── helper-orders.php            # Token yönetimi + API çağrıları
+│   ├── database-orders.php          # Veritabanı işlemleri
+│   ├── n8n-auto-orders.php          # N8N endpoint (7 gün)
+│   ├── n8n-auto-orders-chunked.php  # Chunk endpoint (timeout yok) ✨
+│   └── n8n-auto-orders-orchestrator.php # Chunk koordinatörü
 │
-└── 🚚 Shipments Modülü (Bağımsız)
-    ├── helper-shipments.php  # Token yönetimi + API çağrıları
-    ├── database-shipments.php # Veritabanı işlemleri
-    └── n8n-auto-shipments.php # N8N endpoint'i
+├── 🚚 Shipments Modülü (Bağımsız)
+│   ├── helper-shipments.php            # Token yönetimi + API çağrıları
+│   ├── database-shipments.php          # Veritabanı işlemleri
+│   ├── n8n-auto-shipments.php          # N8N endpoint (7 gün)
+│   ├── n8n-auto-shipments-chunked.php  # Chunk endpoint (timeout yok) ✨
+│   └── n8n-auto-shipments-orchestrator.php # Chunk koordinatörü
+│
+└── 📚 Dokümantasyon
+    ├── README.md             # Ana doküman
+    └── CHUNK-SYSTEM.md       # Chunk sistemi rehberi ✨
 ```
 
 ## 🗄️ Veritabanı Güncelleme Mantığı
@@ -71,23 +79,48 @@ connectapi/
 
 ## 🚀 Kullanım
 
-### Sipariş Verisi Çekme
+### YÖNTEM 1: Standart (7 gün - Hızlı)
+
+#### Sipariş Verisi Çekme
 ```bash
-GET https://your-domain.com/connectapi/n8n-auto-orders.php
+GET https://domain.com/connectapi/n8n-auto-orders.php
 ```
 
-### Sevkiyat Verisi Çekme
+#### Sevkiyat Verisi Çekme
 ```bash
-GET https://your-domain.com/connectapi/n8n-auto-shipments.php
+GET https://domain.com/connectapi/n8n-auto-shipments.php
 ```
+
+### YÖNTEM 2: Chunk Sistemi (120 gün - Timeout Yok) ✨
+
+> **💡 Önerilen:** 30+ günlük veri için chunk sistemini kullanın
+#### Sipariş Verisi (Chunk)
+```bash
+# Orchestrator - chunk listesi al
+GET https://domain.com/connectapi/n8n-auto-orders-orchestrator.php?days=120
+
+# Tek chunk çağrısı
+GET https://domain.com/connectapi/n8n-auto-orders-chunked.php?chunk=0&days=120
+```
+
+#### Sevkiyat Verisi (Chunk)
+```bash
+# Orchestrator - chunk listesi al
+GET https://domain.com/connectapi/n8n-auto-shipments-orchestrator.php?days=120
+
+# Tek chunk çağrısı
+GET https://domain.com/connectapi/n8n-auto-shipments-chunked.php?chunk=0&days=120
+```
+
+> **📚 Detaylı bilgi:** [CHUNK-SYSTEM.md](CHUNK-SYSTEM.md) dosyasına bakın
 
 ### Token Yönetimi (Opsiyonel)
 ```bash
 # Tüm bayiler için token al
-GET https://your-domain.com/connectapi/get-token.php?mode=all
+GET https://domain.com/connectapi/get-token.php?mode=all
 
 # Tek bayi için token al
-GET https://your-domain.com/connectapi/get-token.php
+GET https://domain.com/connectapi/get-token.php
 ```
 
 ### Yanıt Formatı
@@ -116,7 +149,7 @@ GET https://your-domain.com/connectapi/get-token.php
 
 ### 1. Projeyi Klonla
 ```bash
-git clone https://github.com/smtbcn/connectapi.git
+git clone <repository-url>
 cd connectapi
 ```
 
