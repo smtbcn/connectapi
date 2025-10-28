@@ -4,6 +4,11 @@
 # IDE and tooling directories
 .kiro/
 .vscode/
+.git/
+.gitignore
+.gitmodules
+.gitattributes
+.gitconfig
 
 # Environment files (sensitive data)
 .env
