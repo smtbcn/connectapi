@@ -119,7 +119,10 @@ if (!empty($chunkApiResult)) {
         "data_count" => count($dataArray),
         "data" => $dataArray,
         "has_more" => $hasMore,
-        "next_chunk_url" => $hasMore ? "n8n-auto-shipments-chunked.php?chunk=$nextChunk&days=$totalDays" : null,
+		"next_chunk_url" => $hasMore
+			? "https://" . $_SERVER['HTTP_HOST'] . "/connectapi/n8n-auto-shipments-chunked.php?chunk=$nextChunk&days=$totalDays"
+			: null,
+
         "timestamp" => date('Y-m-d H:i:s')
     ], JSON_UNESCAPED_UNICODE);
     
